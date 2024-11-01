@@ -1,0 +1,44 @@
+.data-table-container {
+  position: relative; /* Cambiado de absolute para mejor fluidez en la página */
+  width: 90vw;
+  margin: 20px auto; /* Centrado */
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px; /* Bordes redondeados */
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Asegura que todas las columnas tengan el mismo ancho */
+}
+
+.data-table th, .data-table td {
+  padding: 12px 15px; /* Más espacio */
+  text-align: left;
+  border-bottom: 2px solid #ddd; /* Línea más gruesa */
+}
+
+.data-table th {
+  background-color: #4CAF50; /* Un verde más agradable */
+  color: white; /* Texto blanco para los encabezados */
+  font-weight: bold;
+}
+
+.data-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}

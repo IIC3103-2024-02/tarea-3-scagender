@@ -1,0 +1,18 @@
+FROM node:lts-alpine
+
+WORKDIR /app
+
+COPY package.json ./
+
+RUN npm install
+
+# Instalar nodemon globalmente
+RUN npm install -g nodemon
+
+# Copiar el resto de los archivos necesarios
+COPY . .
+
+# Comando para esperar a la base de datos, ejecutar migraciones, seeders y luego iniciar la aplicación
+CMD while ! nc -z db_dev 5432; do sleep 0.1; done && \
+    npx sequelize-cli db:migrate && \
+    exec npm run start:dev
