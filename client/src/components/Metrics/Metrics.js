@@ -1,99 +1,95 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Metrics.css';
+import React, { useState } from 'react';
 
-function Metrics() {
-    const [ordersPerHour, setOrdersPerHour] = useState(0);
-    const [ordersPerDay, setOrdersPerDay] = useState(0);
-    const [expiringProducts, setExpiringProducts] = useState([]);
-    const [cafeteriaSpaces, setCafeteriaSpaces] = useState([]);
-    const [totalStockBySKU, setTotalStockBySKU] = useState({});
+function ChatPage() {
+  const [messages, setMessages] = useState([]); // Estado para el historial de mensajes
+  const [newMessage, setNewMessage] = useState(''); // Estado para el mensaje actual
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch metrics data from the server
-                const metricsEndpoints = [
-                    'https://granizo13.ing.puc.cl/api/metrics/expiring-items',
-                    'https://granizo13.ing.puc.cl/api/metrics/total-sku',
-                    'https://granizo13.ing.puc.cl/api/metrics/available-storage',
-                    'https://granizo13.ing.puc.cl/api/orders'
-                ];
+  // Función para enviar el mensaje
+  const sendMessage = async () => {
+    if (newMessage.trim() === '') return;
 
-                const [expiringItemsResponse, skuResponse, storageResponse, ordersResponse] = await Promise.all(
-                    metricsEndpoints.map(url => axios.get(url))
-                );
+    // Agrega el mensaje del usuario al historial
+    const userMessage = {
+      sender: 'Usuario',
+      content: newMessage,
+      date: new Date().toLocaleString(),
+    };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-                setExpiringProducts(expiringItemsResponse.data);
-                setTotalStockBySKU(skuResponse.data);
-                setCafeteriaSpaces(storageResponse.data.map(space => ({
-                    ...space,
-                    name: space.kitchen ? "Kitchen" : space.cold ? "Cold" : space.checkIn ? "Check In" : space.checkOut ? "Check Out" : space.buffer ? "Buffer" : "Unknown"
-                })));
-
-                const orders = ordersResponse.data;
-                const totalOrders = orders.length;
-                const totalDays = new Set(orders.map(order => new Date(order.receivedAt).toDateString())).size;
-                const ordersPerDayCalc = totalDays > 0 ? totalOrders / totalDays : 0;
-                const ordersPerHourCalc = ordersPerDayCalc / 24;
-
-                setOrdersPerDay(ordersPerDayCalc.toFixed(2));
-                setOrdersPerHour(ordersPerHourCalc.toFixed(2));
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+    try {
+      // Realizar la solicitud a la API
+      const response = await fetch('http://localhost:8080/api/ask-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: newMessage }),
+      });
+      
+      // Procesar la respuesta de la API
+      if (response.ok) {
+        const data = await response.json();
+        const aiMessage = {
+          sender: 'IA',
+          content: data.response || 'Respuesta de la IA no disponible.',
+          date: new Date().toLocaleString(),
         };
+        setMessages((prevMessages) => [...prevMessages, aiMessage]);
+      } else {
+        const errorMessage = {
+          sender: 'IA',
+          content: 'Error al procesar la pregunta. Inténtalo de nuevo más tarde.',
+          date: new Date().toLocaleString(),
+        };
+        setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      }
+    } catch (error) {
+      const errorMessage = {
+        sender: 'IA',
+        content: 'No se pudo conectar con el servidor.',
+        date: new Date().toLocaleString(),
+      };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    }
 
-        fetchData();
-    }, []);
+    setNewMessage(''); // Limpia el campo de entrada
+  };
 
-    return (
-        <div className="metrics-container">
-            <div className="metric">
-                <h2>Orders per day</h2>
-                <p>{ordersPerDay}</p>
-            </div>
-            <div className="metric">
-                <h2>Orders per hour</h2>
-                <p>{ordersPerHour}</p>
-            </div>
-            <div className="metric">
-                <h2>Expiring products</h2>
-                <ul>
-                    {expiringProducts.map(product => (
-                        <li key={product.sku}>
-                            <p>{product.name}</p>
-                            <p>Expira en: {product.expiration} horas</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="metric">
-                <h2>Cafeteria Spaces</h2>
-                <ul>
-                    {cafeteriaSpaces.map(space => (
-                        <li key={space.id}>
-                            <p>Space: {space.name}</p>
-                            <p>Used Space: {space.usedSpace}</p>
-                            <p>Details: {space.details}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="metric">
-                <h2>Total Stock by SKU</h2>
-                <ul>
-                    {Object.entries(totalStockBySKU).map(([sku, quantity]) => (
-                        <li key={sku}>
-                            <p>SKU: {sku}</p>
-                            <p>Quantity: {quantity}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex flex-col w-1/3 p-4">
+      {/* Panel de chat */}
+      <div className="chat-panel bg-white rounded-lg shadow flex-1 overflow-y-scroll mb-4">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`message-item ${msg.sender === 'Usuario' ? 'text-right' : 'text-left'}`}
+          >
+            <p className="text-black">
+              <strong>{msg.sender}</strong> [{msg.date}]: {msg.content}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Campo de entrada y botón de envío */}
+      <div className="flex items-center">
+        <input
+          type="text"
+          className="flex-1 p-2 border border-gray-400 rounded"
+          placeholder="Escribe tu mensaje..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') sendMessage(); // Enviar mensaje al presionar Enter
+          }}
+        />
+        <button
+          className="bg-blue-500 text-white p-2 ml-2 rounded"
+          onClick={sendMessage}
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  );
 }
 
-export default Metrics;
+export default ChatPage;

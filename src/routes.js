@@ -5,6 +5,7 @@ const orders = require('./routes/orders');
 const metrics = require('./routes/metrics');
 const management = require('./routes/management');
 const { server } = require('./app');
+const guiones = require('./routes/guiones');
 
 
 router.get('/', async ctx => {
@@ -14,6 +15,8 @@ router.get('/', async ctx => {
 router.use('/orders', orders.routes());
 router.use('/metrics', metrics.routes());
 router.use('/management', management.routes());
+router.use('/guiones', guiones.router.routes());
+
 
 
 async function checkDB(ctx) {

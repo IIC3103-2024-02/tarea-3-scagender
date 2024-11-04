@@ -20,7 +20,7 @@
     "koa-bodyparser": "^4.4.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.2",
-    "pg": "^8.12.0",
+    "pg": "^8.13.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2"

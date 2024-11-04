@@ -2,6 +2,8 @@ const Koa = require('koa');
 const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 const router = require('./routes');
+const { downloadAllScripts } = require('./routes/guiones');
+const pool = require('./db'); // Importa la conexión
 
 router.prefix('/api');
 
@@ -22,13 +24,14 @@ app.use(cors());
 app.use(bodyParser());
 
 
-
 // Usar el router en la app
 app.use(router.routes())
 app.use(router.allowedMethods());
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, async () => {
   console.log(`Servidor Koa corriendo en http://localhost:${PORT}`);
+  // Llama a la función de descarga de guiones al iniciar
+  await downloadAllScripts();
 });
 
 module.exports = { app, server };
