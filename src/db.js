@@ -11,6 +11,10 @@ const pool = new Pool({
 async function initializeDatabase() {
   const client = await pool.connect();
   try {
+
+    await client.query(`CREATE EXTENSION IF NOT EXISTS vector;`);
+    console.log("Extensión 'vector' creada.");
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS embeddings (
         id SERIAL PRIMARY KEY,
