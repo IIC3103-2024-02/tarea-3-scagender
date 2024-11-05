@@ -16,6 +16,12 @@ const app = new Koa();
 //   ctx.body = 'Ruta principal de la API';
 // });
 
+app.use(cors({
+  origin: 'https://tarea3-scagender.netlify.app/', // Reemplaza esto con el dominio de tu cliente
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
+
 router.get('/saludo', async ctx => {
   ctx.body = '¡Hola desde la API Koa!';
 });
