@@ -18,7 +18,7 @@ function ChatPage() {
 
     try {
       // Realizar la solicitud a la API
-      const response = await fetch('http://localhost:8080/api/ask-question', {
+      const response = await fetch('https://tarea-3-scagender.onrender.com/api/ask-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: newMessage }),
