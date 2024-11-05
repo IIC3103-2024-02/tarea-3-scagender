@@ -26,7 +26,6 @@ router.get('/saludo', async ctx => {
   ctx.body = '¡Hola desde la API Koa!';
 });
 
-app.use(cors());
 app.use(bodyParser());
 
 
