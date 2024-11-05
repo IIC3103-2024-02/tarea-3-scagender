@@ -2,7 +2,7 @@ const Router = require('@koa/router');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const { pool, initializeDatabase } = require('./db'); // Asegúrate de importar el pool
+const { pool, initializeDatabase } = require('../db'); // Asegúrate de importar el pool
 
 const router = new Router();
 
