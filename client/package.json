@@ -36,5 +36,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://dev.proyecto.2024-2.tallerdeintegracion.cl"
+  "proxy": "https://dev.proyecto.2024-2.tallerdeintegracion.cl",
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
 }
