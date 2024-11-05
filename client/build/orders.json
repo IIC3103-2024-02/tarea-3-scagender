@@ -1,0 +1,73 @@
+[
+    {
+      "receivedAt": "2021-09-01T12:00:00Z",
+      "orderId": "123456",
+      "sku": "SKU123",
+      "quantity": 10,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-02T15:30:00Z",
+      "orderId": "789012",
+      "sku": "SKU456",
+      "quantity": 5,
+      "status": "rechazado"
+    },
+    {
+      "receivedAt": "2021-09-03T09:15:00Z",
+      "orderId": "234567",
+      "sku": "SKU789",
+      "quantity": 20,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-04T16:45:00Z",
+      "orderId": "890123",
+      "sku": "SKU101",
+      "quantity": 15,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-05T13:20:00Z",
+      "orderId": "345678",
+      "sku": "SKU202",
+      "quantity": 7,
+      "status": "rechazado"
+    },
+    {
+      "receivedAt": "2021-09-06T18:55:00Z",
+      "orderId": "456789",
+      "sku": "SKU303",
+      "quantity": 12,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-07T11:00:00Z",
+      "orderId": "567890",
+      "sku": "SKU404",
+      "quantity": 9,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-08T14:35:00Z",
+      "orderId": "678901",
+      "sku": "SKU505",
+      "quantity": 6,
+      "status": "rechazado"
+    },
+    {
+      "receivedAt": "2021-09-09T10:10:00Z",
+      "orderId": "789012",
+      "sku": "SKU606",
+      "quantity": 18,
+      "status": "aceptado"
+    },
+    {
+      "receivedAt": "2021-09-10T20:50:00Z",
+      "orderId": "890123",
+      "sku": "SKU707",
+      "quantity": 14,
+      "status": "rechazado"
+    }
+  ]
+  
