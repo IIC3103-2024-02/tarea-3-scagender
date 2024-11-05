@@ -8,4 +8,26 @@ const pool = new Pool({
   port: 5432,
 });
 
+async function initializeDatabase() {
+  const client = await pool.connect();
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS embeddings (
+        id SERIAL PRIMARY KEY,
+        movie_title TEXT NOT NULL,
+        fragment TEXT NOT NULL,
+        embedding VECTOR(768) NOT NULL
+      );
+    `);
+    console.log("Tabla 'embeddings' verificada o creada.");
+  } catch (error) {
+    console.error("Error al inicializar la base de datos:", error);
+  } finally {
+    client.release();
+  }
+}
+
+// Llama a esta función cuando inicie tu aplicación
+initializeDatabase();
+
 module.exports = pool;
