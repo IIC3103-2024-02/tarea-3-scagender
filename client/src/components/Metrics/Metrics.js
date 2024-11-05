@@ -21,9 +21,6 @@ function ChatPage() {
       console.log('Enviando mensaje a la API:', newMessage);
       const response = await fetch('https://tarea-3-scagender.onrender.com/api/guiones/ask-question', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Agrega esta cabecera
-        },
         body: JSON.stringify({ query: newMessage }), // Asegúrate de que el cuerpo tenga el formato correcto
       });
       console.log(response);
