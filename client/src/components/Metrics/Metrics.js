@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import './Metrics.css'; // Ensure you have this CSS file
 
 function ChatPage() {
-  const [messages, setMessages] = useState([]); // Estado para el historial de mensajes
-  const [newMessage, setNewMessage] = useState(''); // Estado para el mensaje actual
+  const [messages, setMessages] = useState([]); // State for chat history
+  const [newMessage, setNewMessage] = useState(''); // State for the current message
+  const chatEndRef = useRef(null); // Reference for auto-scrolling
 
-  // Función para enviar el mensaje
+  // Movie scripts array
+  const scripts = [
+    { title: "Kung Fu Panda", url: "https://imsdb.com/scripts/Kung-Fu-Panda.html" },
+    { title: "Aladdin", url: "https://imsdb.com/scripts/Aladdin.html" },
+    { title: "Beauty and the Beast", url: "https://imsdb.com/scripts/Beauty-and-the-Beast.html" },
+    { title: "Coco", url: "https://imsdb.com/scripts/Coco.html" },
+    { title: "Happy Feet", url: "https://imsdb.com/scripts/Happy-Feet.html" },
+    { title: "Little Mermaid", url: "https://imsdb.com/scripts/Little-Mermaid,-The.html" },
+    { title: "Shrek the Third", url: "https://imsdb.com/scripts/Shrek-the-Third.html" },
+    { title: "Wall-E", url: "https://imsdb.com/scripts/Wall-E.html" },
+    { title: "Zootopia", url: "https://imsdb.com/scripts/Zootopia.html" },
+    { title: "The Incredibles", url: "https://imsdb.com/scripts/Incredibles,-The.html" },
+  ];
+
+  // Function to send the message
   const sendMessage = async () => {
     if (newMessage.trim() === '') return;
 
-    // Agrega el mensaje del usuario al historial
     const userMessage = {
       sender: 'Usuario',
       content: newMessage,
@@ -17,17 +32,16 @@ function ChatPage() {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     try {
-      // Realizar la solicitud a la API
-      console.log('Enviando mensaje a la API:', newMessage);
+      // Send the message to the API
       const response = await fetch('https://tarea-3-scagender.onrender.com/api/guiones/ask-question', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json', // Agrega esta cabecera
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: newMessage }), // Asegúrate de que el cuerpo tenga el formato correcto
+        body: JSON.stringify({ query: newMessage }),
       });
-      console.log(response);
-      // Procesar la respuesta de la API
+
+      // Process the API response
       if (response.ok) {
         const data = await response.json();
         const aiMessage = {
@@ -53,41 +67,55 @@ function ChatPage() {
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     }
 
-    setNewMessage(''); // Limpia el campo de entrada
+    setNewMessage(''); // Clear the input field
   };
 
+  // Scroll to the bottom of the chat panel whenever messages change
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
-    <div className="flex flex-col w-1/3 p-4">
-      {/* Panel de chat */}
-      <div className="chat-panel bg-white rounded-lg shadow flex-1 overflow-y-scroll mb-4">
+    <div className="chat-container">
+      {/* Introductory message */}
+      <div className="intro-message">
+        <p>Hola soy un experto en las siguientes películas:</p>
+        <ul>
+          {scripts.map((script, index) => (
+            <li key={index}>
+              <a href={script.url} target="_blank" rel="noopener noreferrer">{script.title}</a>
+            </li>
+          ))}
+        </ul>
+        <p>Para obtener una mejor respuesta, explícita el nombre de la película en tu prompt (Protip: Mejores respuestas si el título está en inglés).</p>
+      </div>
+
+      {/* Chat panel */}
+      <div className="chat-panel">
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message-item ${msg.sender === 'Usuario' ? 'text-right' : 'text-left'}`}
-          >
-            <p className="text-black">
+          <div key={index} className={`message-item ${msg.sender === 'Usuario' ? 'user-message' : 'ai-message'}`}>
+            <p className="message-text">
               <strong>{msg.sender}</strong> [{msg.date}]: {msg.content}
             </p>
           </div>
         ))}
+        {/* Scroll to the bottom marker */}
+        <div ref={chatEndRef} />
       </div>
 
-      {/* Campo de entrada y botón de envío */}
-      <div className="flex items-center">
+      {/* Input field and send button */}
+      <div className="input-container">
         <input
           type="text"
-          className="flex-1 p-2 border border-gray-400 rounded"
+          className="input-field"
           placeholder="Escribe tu mensaje..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') sendMessage(); // Enviar mensaje al presionar Enter
+            if (e.key === 'Enter') sendMessage(); // Send message on Enter key
           }}
         />
-        <button
-          className="bg-blue-500 text-white p-2 ml-2 rounded"
-          onClick={sendMessage}
-        >
+        <button className="send-button" onClick={sendMessage}>
           Enviar
         </button>
       </div>
