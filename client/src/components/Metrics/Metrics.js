@@ -33,6 +33,7 @@ function ChatPage() {
 
     try {
       // Send the message to the API
+      setNewMessage('LOADING...');
       const response = await fetch('https://tarea-3-scagender.onrender.com/api/guiones/ask-question', {
         method: 'POST',
         headers: {
@@ -50,6 +51,7 @@ function ChatPage() {
           date: new Date().toLocaleString(),
         };
         setMessages((prevMessages) => [...prevMessages, aiMessage]);
+        setNewMessage(''); // Clear the input field
       } else {
         const errorMessage = {
           sender: 'IA',
@@ -57,6 +59,7 @@ function ChatPage() {
           date: new Date().toLocaleString(),
         };
         setMessages((prevMessages) => [...prevMessages, errorMessage]);
+        setNewMessage('');
       }
     } catch (error) {
       const errorMessage = {
@@ -87,7 +90,7 @@ function ChatPage() {
             </li>
           ))}
         </ul>
-        <p>Para obtener una mejor respuesta, explícita el nombre de la película en tu prompt (Protip: Mejores respuestas si el título está en inglés).</p>
+        <p>Para obtener una mejor respuesta, explícita el nombre de la película en tu prompt (Protip: Mejores respuestas si el título y/o prompt está en inglés).</p>
       </div>
 
       {/* Chat panel */}
