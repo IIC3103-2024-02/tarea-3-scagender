@@ -16,12 +16,11 @@ const app = new Koa();
 //   ctx.body = 'Ruta principal de la API';
 // });
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Permite todos los orígenes
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Métodos permitidos
-  res.header('Access-Control-Allow-Headers', 'Content-Type'); // Cabeceras permitidas
-  next();
-});
+app.use(cors({
+  origin: '*', // Allows all origins; change this to a specific origin if needed
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type'],
+}));
 
 router.get('/saludo', async ctx => {
   ctx.body = '¡Hola desde la API Koa!';
