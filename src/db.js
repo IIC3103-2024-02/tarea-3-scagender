@@ -27,7 +27,4 @@ async function initializeDatabase() {
   }
 }
 
-// Llama a esta función cuando inicie tu aplicación
-initializeDatabase();
-
-module.exports = pool;
+module.exports = { pool, initializeDatabase };

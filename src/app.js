@@ -3,7 +3,7 @@ const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 const router = require('./routes');
 const { downloadAllScripts } = require('./routes/guiones');
-const pool = require('./db'); // Importa la conexión
+const { pool, initializeDatabase } = require('./db');
 
 router.prefix('/api');
 
@@ -30,6 +30,11 @@ app.use(router.allowedMethods());
 
 const server = app.listen(PORT, async () => {
   console.log(`Servidor Koa corriendo en http://localhost:${PORT}`);
+  
+  // Llama a initializeDatabase al iniciar el servidor
+  await initializeDatabase();
+  console.log("Inicialización de la base de datos completada.");
+  
   // Llama a la función de descarga de guiones al iniciar
   await downloadAllScripts();
 });
