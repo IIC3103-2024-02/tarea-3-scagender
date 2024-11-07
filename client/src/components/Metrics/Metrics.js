@@ -90,7 +90,7 @@ function ChatPage() {
             </li>
           ))}
         </ul>
-        <p>Para obtener una mejor respuesta, explícita el nombre de la película en tu prompt (Protip: Mejores respuestas si el título y/o prompt está en inglés).</p>
+        <p>Para obtener respuesta, explícita el nombre de la película en inglés en tu prompt, copia y pega el nombre de la lista (Protip: Mejores respuestas si el título y/o prompt está en inglés).</p>
       </div>
 
       {/* Chat panel */}
